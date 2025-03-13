@@ -1,10 +1,14 @@
 const express = require('express');
 const { Pool } = require('pg');
 const bodyParser = require('body-parser');
+const cors = require('cors'); // Import cors
 
 // Create an Express app
 const app = express();
 const port = 3000;
+
+// Enable CORS for all routes
+app.use(cors());  // Use cors middleware
 
 // Middleware to parse JSON bodies
 app.use(bodyParser.json());
@@ -22,16 +26,16 @@ const pool = new Pool({
 
 // Define a simple POST route
 app.post('/contact_form', async (req, res) => {
-  const { ime,broj_telefona, email, poruka } = req.body;
+  const { ime, broj_telefona, email, poruka } = req.body;
 
-  if (!name || !email) {
+  if (!ime || !email) {
     return res.status(400).json({ error: 'Name and email are required' });
   }
 
   try {
     const result = await pool.query(
-      'INSERT INTO users (ime,broj_telefona, email,poruka) VALUES ($1, $2,$3,$4) RETURNING *',
-      [ime,broj_telefona, email,poruka]
+      'INSERT INTO users (ime, broj_telefona, email, poruka) VALUES ($1, $2, $3, $4) RETURNING *',
+      [ime, broj_telefona, email, poruka]
     );
     res.status(201).json(result.rows[0]);
   } catch (err) {
