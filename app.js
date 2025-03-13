@@ -34,7 +34,7 @@ app.post('/contact_form', async (req, res) => {
 
   try {
     const result = await pool.query(
-      'INSERT INTO users (ime, broj_telefona, email, poruka) VALUES ($1, $2, $3, $4) RETURNING *',
+      'INSERT INTO contact_form (ime, broj_telefona, email, poruka) VALUES ($1, $2, $3, $4) RETURNING *',
       [ime, broj_telefona, email, poruka]
     );
     res.status(201).json(result.rows[0]);
